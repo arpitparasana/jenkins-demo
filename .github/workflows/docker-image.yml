@@ -7,6 +7,7 @@ on:
     branches: [ "main" ]
 env:
   ARTIFACT_NAME: jenkins-demo-snapshot
+  
 jobs:
 
   build:
@@ -17,13 +18,13 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ARTIFACT_NAME}}:$(date +%s)
+      run: docker build . --file Dockerfile --tag ${{ env.ARTIFACT_NAME }}:$(date +%s)
 
     - name: Save docker image
-      run: docker save ${{ARTIFACT_NAME}}:$(date +%s) -o ${{ARTIFACT_NAME}}.tar
+      run: docker save ${{ env.ARTIFACT_NAME }}:$(date +%s) -o ${{ env.ARTIFACT_NAME }}.tar
     
     - name: upload the image
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ARTIFACT_NAME}}
-        path: ${{ARTIFACT_NAME}}.tar
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.ARTIFACT_NAME }}.tar
