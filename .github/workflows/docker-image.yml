@@ -17,14 +17,11 @@ jobs:
     
     - name: Build and save Docker image
       run: |
-        IMAGE_NAME="jenkins-demo-image:$(date +%s)"
-        docker build . --file Dockerfile --tag $IMAGE_NAME
-        ARTIFACT_NAME="jenkins-demo-image-$(date +%s)"
-        docker save $IMAGE_NAME -o ARTIFACT_NAME.tar
-        echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
+        docker build . --file Dockerfile --tag jenkins-demo:latest
+        docker save jenkins-demo:latest -o jenkins-demo-image.tar
     
     - name: upload the image
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.ARTIFACT_NAME }}.tar
-        path: ${{ env.ARTIFACT_NAME }}.tar
+        name: jenkins-demo-image.tar
+        path: jenkins-demo-image.tar
