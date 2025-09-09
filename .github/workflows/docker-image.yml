@@ -17,14 +17,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ env.ARTIFACT_NAME }}:$(date +%s)
-
-    - name: Save docker image
-      run: docker save ${{ env.ARTIFACT_NAME }}:$(date +%s) -o ${{ env.ARTIFACT_NAME }}.tar
+    - name: Build and save Docker image
+      run: |
+        IMAGE_NAME = ${{ env.ARTIFACT_NAME }}:$(date +%s)
+        docker build . --file Dockerfile --tag ${{ IMAGE_NAME }}
+        docker save ${{ IMAGE_NAME }} -o ${{ IMAGE_NAME }}.tar
     
     - name: upload the image
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.ARTIFACT_NAME }}
-        path: ${{ env.ARTIFACT_NAME }}.tar
+        name: ${{ IMAGE_NAME }}.tar
+        path: ${{ IMAGE_NAME }}.tar
